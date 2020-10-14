@@ -89,6 +89,20 @@ export class OrderComponent implements OnInit, OnDestroy {
     //todo
   }
 
+  getChange(newItems:any[]) {
+    let currentItems = this.orderForm.get('items').value;
+
+    for (let i = 0; i < newItems.length; i++) {
+      let item = newItems[i];
+      let idx = currentItems.indexOf(item);
+      if (idx === -1) {
+        currentItems.push(item);
+      }
+      
+    }
+    this.orderForm.get('items').patchValue(newItems);
+  }
+
   ngOnDestroy(): void {
     this.subscription && this.subscription.unsubscribe && this.subscription.unsubscribe();
   }

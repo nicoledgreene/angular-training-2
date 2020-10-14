@@ -6,6 +6,8 @@ import { of } from 'rxjs';
 import { OrderComponent } from './order.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RestaurantService } from '../restaurant/restaurant.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MenuItemsComponent } from './menu-items/menu-items.component';
 
 class MockRestaurantService {
   getRestaurant(slug:string) {
@@ -74,7 +76,7 @@ describe('OrderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OrderComponent ], 
+      declarations: [ OrderComponent, MenuItemsComponent ], 
       imports: [  ReactiveFormsModule, RouterTestingModule ],
       providers: [{
         provide: RestaurantService,
@@ -82,7 +84,8 @@ describe('OrderComponent', () => {
       }, {
         provide: ActivatedRoute,
         useValue: MockActivatedRoute
-      }]
+      }],
+      schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
   }));
@@ -164,5 +167,29 @@ describe('OrderComponent', () => {
     let itemFormControl = fixture.componentInstance.orderForm.controls.items;
     expect(itemFormControl.valid).toEqual(false);
   });
+
+  it('should update items FormControl when setUpdatesItems is called', () => {
+    const fixture = TestBed.createComponent(OrderComponent);
+    fixture.detectChanges();
+    const compiled = fixture.debugElement.nativeElement;
+    let childInput = compiled.getElementsByTagName('pmo-menu-items')[0].getElementsByTagName('input')[0];
+    let formItems = fixture.componentInstance.orderForm.get('items');
+    childInput.click();
+    fixture.detectChanges();
+    expect(formItems.value).toEqual([{"name": "Crab Pancakes with Sorrel Syrup","price": 35.99}])
+  });
+
+  it('should update the order total when the items FormControl value changes', () => {
+    const fixture = TestBed.createComponent(OrderComponent);
+    fixture.detectChanges();
+    let compiled = fixture.debugElement.nativeElement;
+    let childInput1 = compiled.getElementsByTagName('pmo-menu-items')[0].getElementsByTagName('input')[0];
+    let childInput2 = compiled.getElementsByTagName('pmo-menu-items')[0].getElementsByTagName('input')[1];
+    childInput1.click();
+    childInput2.click();
+    fixture.detectChanges();
+    let orderText = compiled.querySelector('.submit h4');
+    expect(orderText.textContent).toEqual('Total: $57.98')
+  })
 
 });

@@ -12,6 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DetailComponent } from './restaurant/detail/detail.component';
 import { OrderComponent } from './order/order.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { MenuItemsComponent } from './order/menu-items/menu-items.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
     RestaurantComponent,
     ImageUrlPipe,
     DetailComponent,
-    OrderComponent
+    OrderComponent,
+    MenuItemsComponent
   ],
   imports: [
     BrowserModule,
