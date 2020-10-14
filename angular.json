@@ -25,10 +25,16 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/place-my-order-assets/images/",
+                "output": "./assets/images"
+              }
             ],
             "styles": [
-              "src/styles.less"
+              "src/styles.less",
+              "./node_modules/place-my-order-assets/less/styles.less"
             ],
             "scripts": []
           },
@@ -89,10 +95,16 @@
             "karmaConfig": "karma.conf.js",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/place-my-order-assets/images/",
+                "output": "./assets/images"
+              }
             ],
             "styles": [
-              "src/styles.less"
+              "src/styles.less",
+              "./node_modules/place-my-order-assets/less/styles.less"
             ],
             "scripts": []
           }
