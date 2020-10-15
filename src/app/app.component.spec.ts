@@ -15,6 +15,7 @@ import { RestaurantService } from './restaurant/restaurant.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DetailComponent } from './restaurant/detail/detail.component';
 import { OrderComponent } from './order/order.component';
+import { HistoryComponent } from './order/history/history.component';
 
 class MockRestaurantService {
   getRestaurants() {
@@ -190,7 +191,8 @@ describe('AppComponent', () => {
         AppRoutingModule, HttpClientModule, ReactiveFormsModule
       ],
       declarations: [
-        AppComponent, HomeComponent, RestaurantComponent, ImageUrlPipe, DetailComponent, OrderComponent
+        AppComponent, HomeComponent, RestaurantComponent, 
+        ImageUrlPipe, DetailComponent, OrderComponent, HistoryComponent
       ],
       schemas: [
         NO_ERRORS_SCHEMA
@@ -257,6 +259,14 @@ describe('AppComponent', () => {
     router.navigate(['restaurants/crab-shack/order']).then(() => {
       expect(location.path()).toBe('/restaurants/crab-shack/order');
       expect(compiled.querySelector('pmo-order')).not.toBe(null);
+    });
+  });
+
+  it('should render the HistoryComponent with router navigates to "/order-history" path', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    router.navigate(['order-history']).then(() => {
+      expect(location.path()).toBe('/order-history');
+      expect(compiled.querySelector('pmo-history')).not.toBe(null);
     });
   });
 

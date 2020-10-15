@@ -6,6 +6,8 @@ import { RestaurantService } from '../restaurant/restaurant.service';
 import { Restaurant } from '../restaurant/restaurant';
 import { Subscription } from 'rxjs';
 
+import { OrderService, Order, Item } from './order.service';
+
 //CUSTOM VALIDATION FUNCTION TO ENSURE THAT THE ITEMS FORM VALUE CONTAINS AT LEAST ONE ITEM. 
 function minLengthArray(min: number) {
   return (c: AbstractControl): {[key: string]: any} => {
@@ -26,7 +28,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   isLoading: boolean = true;
   items: FormArray;
   orderTotal: number = 0.0;
-  completedOrder: any;
+  completedOrder: Order;
   orderComplete: boolean = false;
   orderProcessing: boolean = false;
   private subscription: Subscription;
@@ -34,7 +36,8 @@ export class OrderComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute, 
     private restaurantService: RestaurantService,
-    private formBuilder: FormBuilder 
+    private formBuilder: FormBuilder,
+    private orderService: OrderService,
   ) { 
   }
 
@@ -63,30 +66,28 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   onChanges() {
-    // SUBSCRIBE TO THE ITEMS FORMCONTROL CHANGE TO CALCULATE A NEW TOTAL
-    this.subscription = this.orderForm.get('items').valueChanges.subscribe(_val => {
+    this.subscription = this.orderForm.get('items').valueChanges.subscribe(val => {
       let total = 0.0;
-      if(_val.length) {
-        _val.forEach((item: any) => {
-          total += item.price;
-        });
-        this.orderTotal = Math.round(total * 100) / 100;
-      }
-      else {
-        this.orderTotal = total;
-      }
-    })
+      val.forEach((item: Item) => {
+        total += item.price;
+      });
+      this.orderTotal = Math.round(total * 100) / 100;
+    });
   }
 
   startNewOrder() {
     this.orderComplete = false;
-    this.completedOrder = this.orderForm.value;
-    //CLEAR THE ORDER FORM
+    this.orderTotal = 0.0;
     this.createOrderForm();
   }
 
   onSubmit() {
-    //todo
+    this.orderProcessing = true;
+    this.orderService.createOrder(this.orderForm.value).subscribe((res: Order) => {
+      this.completedOrder = res;
+      this.orderComplete = true;
+      this.orderProcessing = false;
+    });
   }
 
   getChange(newItems:any[]) {

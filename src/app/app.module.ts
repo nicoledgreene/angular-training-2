@@ -13,6 +13,8 @@ import { DetailComponent } from './restaurant/detail/detail.component';
 import { OrderComponent } from './order/order.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { MenuItemsComponent } from './order/menu-items/menu-items.component';
+import { HistoryComponent } from './order/history/history.component';
+import { ListComponent } from './order/list/list.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { MenuItemsComponent } from './order/menu-items/menu-items.component';
     ImageUrlPipe,
     DetailComponent,
     OrderComponent,
-    MenuItemsComponent
+    MenuItemsComponent,
+    HistoryComponent,
+    ListComponent
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,9 @@
-<ng-container *ngIf="isLoading">
+<ng-container *ngIf="(isLoading$ | async)">
   <div class="loading"></div>
 </ng-container>
-<ng-container *ngIf="!isLoading">
+<ng-container *ngIf="restaurant$ | async as restaurant">
+
+<ng-container *ngIf="!(isLoading$ | async)">
   <div class="restaurant-header" [ngStyle]="{'background-image': 'url('+ getUrl(restaurant.images.banner) + ')'}">
   <div class="background">
     <h2>{{restaurant.name}}</h2>
@@ -33,4 +35,6 @@
     </a>
   </p>
 </div>
+</ng-container>
+
 </ng-container>

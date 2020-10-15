@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Observable, ReplaySubject } from 'rxjs';
+import { map, multicast, refCount, switchMap, tap } from 'rxjs/operators';
 import { Restaurant } from '../restaurant';
 import { RestaurantService } from '../restaurant.service';
 
@@ -10,18 +12,26 @@ import { RestaurantService } from '../restaurant.service';
 })
 export class DetailComponent implements OnInit {
 
-  restaurant: Restaurant;
-  isLoading: boolean = true;
+  restaurant$: Observable<Restaurant>;
+  isLoading$: Observable<boolean>;
 
   constructor(private route: ActivatedRoute, private restaurantService: RestaurantService) { }
 
   ngOnInit() {
-    const restaurantSlug = this.route.snapshot.paramMap.get('slug');
+    this.restaurant$ = this.route.paramMap.pipe(
+      switchMap((paramMap: ParamMap) => {
+        const slug = paramMap.get('slug');
+        return this.restaurantService.getRestaurant(slug);
+      }),
+      multicast(new ReplaySubject(1)),
+      refCount()
+    )
 
-    this.restaurantService.getRestaurant(restaurantSlug).subscribe(_res => {
-      this.restaurant = _res;
-      this.isLoading = false;
-    })
+    this.isLoading$ = this.restaurant$.pipe(
+      map((restaurant: Restaurant) => {
+        return !restaurant;
+      })
+    )
   }
 
   getUrl(image:string): string {
