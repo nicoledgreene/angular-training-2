@@ -15,6 +15,8 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { MenuItemsComponent } from './order/menu-items/menu-items.component';
 import { HistoryComponent } from './order/history/history.component';
 import { ListComponent } from './order/list/list.component';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { ListComponent } from './order/list/list.component';
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    TabsModule.forRoot()
+    TabsModule.forRoot(),
+    StoreModule.forRoot({}, {}),
+    EffectsModule.forRoot([])
   ],
   providers: [],
   bootstrap: [AppComponent]
